@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { authorization } = require('../middlewares/auth.middleware');
+const { authorization } = require('../middlewares/authorization.middleware');
 const jwtAuth = require('../middlewares/jwtAuth.middleware');
 
 const { getProducts, createProduct, updateProduct, deleteProduct } = require('../controllers/product.controller');
