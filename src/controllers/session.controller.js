@@ -4,18 +4,15 @@ const { generateToken } = require('../utils/jwt');
 
 const userRepo = new UserRepository();
 
-// 👉 REGISTRO DE USUARIO
 const registerUser = async (req, res) => {
   try {
     const userData = req.body;
 
-    // Verificar si el email ya existe
     const existingUser = await userRepo.getByEmail(userData.email);
     if (existingUser) {
       return res.status(400).json({ status: 'error', message: 'El email ya está registrado' });
     }
 
-    // ❌ NO volvemos a encriptar aquí (ya se hace en UserRepository)
     const user = await userRepo.register(userData);
 
     res.status(201).json({
@@ -29,7 +26,6 @@ const registerUser = async (req, res) => {
   }
 };
 
-// 👉 LOGIN DE USUARIO
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -39,16 +35,13 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ status: 'error', message: 'Usuario no encontrado' });
     }
 
-    // Convertimos el documento de Mongoose a objeto plano (por si acaso)
     const userObj = user.toObject ? user.toObject() : user;
 
-    // Comparamos la contraseña ingresada con la almacenada (hash)
     const passwordIsValid = isValidPassword(userObj, password);
     if (!passwordIsValid) {
       return res.status(401).json({ status: 'error', message: 'Credenciales inválidas' });
     }
 
-    // Generamos token JWT
     const token = generateToken({
       id: userObj._id,
       email: userObj.email,

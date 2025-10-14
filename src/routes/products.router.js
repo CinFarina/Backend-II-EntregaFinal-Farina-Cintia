@@ -1,6 +1,6 @@
 const { Router } = require('express');
-const { authorization } = require('../middlewares/auth.middleware'); // ✅ Importación correcta
-const jwtAuth = require('../middlewares/jwtAuth.middleware'); // ✅
+const { authorization } = require('../middlewares/auth.middleware');
+const jwtAuth = require('../middlewares/jwtAuth.middleware');
 
 const { getProducts, createProduct, updateProduct, deleteProduct } = require('../controllers/product.controller');
 

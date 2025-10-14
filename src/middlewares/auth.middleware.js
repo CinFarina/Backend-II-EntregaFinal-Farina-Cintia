@@ -1,16 +1,15 @@
-const authorization = (role) => {
-    return (req, res, next) => {
-        if (!req.user) {
-            return res.status(401).send({ status: 'error', message: 'No autenticado' });
-        }
+const jwt = require('jsonwebtoken');
 
-        if (req.user.role !== role) {
-            return res.status(403).send({ status: 'error', message: 'No autorizado' });
-        }
+const authToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ message: 'Token no encontrado' });
 
-        next();
-    };
+  const token = authHeader.split(' ')[1];
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ message: 'Token inválido' });
+    req.user = decoded;
+    next();
+  });
 };
 
-// ✅ Asegurate de exportarlo así:
-module.exports = { authorization };
+module.exports = { authToken };

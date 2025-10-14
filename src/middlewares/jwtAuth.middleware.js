@@ -12,7 +12,7 @@ const jwtAuth = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded; // El payload del token
+        req.user = decoded;
         next();
     } catch (error) {
         return res.status(401).json({ status: 'error', message: 'Token inválido o expirado' });

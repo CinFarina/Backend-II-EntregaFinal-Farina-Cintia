@@ -3,12 +3,13 @@ const express = require('express');
 const handlebars = require('express-handlebars');
 const { Server } = require('socket.io');
 const mongoose = require('mongoose');
-const path = require('path');  // <-- agregado
+const path = require('path');
 
 const productRouter = require('./src/routes/products.router');
 const sessionsRouter = require('./src/routes/sessions.router');
 const usersRouter = require('./src/routes/users.router');
 const viewsRouter = require('./src/routes/views.router');
+const cartsRouter = require('./src/routes/carts.router');
 
 const ProductModel = require('./src/dao/models/product.model');
 
@@ -17,10 +18,10 @@ const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public'))); // también usar path.join
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.engine('handlebars', handlebars.engine());
-app.set('views', path.join(__dirname, 'src', 'views'));  // <-- corregido aquí
+app.set('views', path.join(__dirname, 'src', 'views'));
 app.set('view engine', 'handlebars');
 
 mongoose.connect(process.env.MONGODB_URI)
@@ -31,6 +32,8 @@ app.use('/api/products', productRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/users', usersRouter);
 app.use('/', viewsRouter);
+app.use('/api/carts', cartsRouter);
+
 
 app.use((req, res) => {
   res.status(404).send({ error: 'Ruta no encontrada' });

@@ -1,5 +1,3 @@
-// src/middlewares/auth.middleware.js
-
 const authorization = (role) => {
     return (req, res, next) => {
         if (!req.user) {
